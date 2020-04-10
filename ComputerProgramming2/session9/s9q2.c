@@ -20,7 +20,7 @@ char delete (ListNodePtr *sPtr, char value);
 int isEmpty(ListNodePtr sPtr);
 void printList(ListNodePtr currentPtr);
 void instructions(void);
-/*NEW FUNCTION*/
+/*NEW FUNCTION: Replaces an element in a linked list, if found, with another element*/
 void replace(ListNodePtr *sPtr, char value, char replacement);
 
 int main(void)
@@ -33,7 +33,7 @@ int main(void)
     printf("? ");
     scanf("%d", &choice);
 
-    /* loop while user does not choose 3 */
+    /* loop while user does not choose 4 */
     while (choice != 4)
     {
         switch (choice)
@@ -67,17 +67,29 @@ int main(void)
             } /* end else */
 
             break;
-        case 3:
-            if(!isEmpty(startPtr))
+        case 3: /*Replaces an element*/
+            if (!isEmpty(startPtr))
             {
-                char value,replacement;
+                char characterToBeReplaced, replacement;
+                /*Retrieves character to be replaced*/
                 printf("Enter character to be replaced: ");
-                scanf("%c", &value);
+                scanf("\n%c", &characterToBeReplaced);
+
+                /*Retrieves replacement character*/
                 printf("Enter replacment character: ");
-                scanf("%c", &replacement);
-                replace(&startPtr,value,replacement);
+                scanf("\n%c", &replacement);
+
+                /*Replaces the character*/
+                replace(&startPtr, characterToBeReplaced, replacement);
+
+                /*Prints list to reflect new character change*/
                 printList(startPtr);
             }
+            else
+            {
+                printf("List is empty");
+            }
+            break;
         default:
             printf("Invalid choice.\n\n");
             instructions();
@@ -204,22 +216,23 @@ void printList(ListNodePtr currentPtr)
     } /* end else */
 } /* end function printList */
 
+/*Function to replace an element in a linked list*/
 void replace(ListNodePtr *sPtr, char value, char replacement)
 {
-    ListNodePtr prev = NULL;
-    ListNodePtr cur = *sPtr;
+    ListNodePtr cur = *sPtr; // A pointer to help us loop through the linked list
 
-    while (cur != NULL && cur->data != value)
+    /*Traverses linked list until either the element to be replaced is found or we reach the end of the linked list*/
+    while (cur && cur->data != value)
     {
-        prev = cur;
         cur = cur->nextPtr;
     }
-
-    if (cur != NULL)
+    /*If the character exists, we replace it with our chosen replacement*/
+    if (cur)
     {
         cur->data = replacement;
         printf("\nReplaced character: %c\n", replacement);
     }
+    /*Otherwise the character doesn't exists*/
     else
     {
         printf("Character not found");
